@@ -31,6 +31,15 @@ repositories {
 
 dependencies {
     /*============================================================*/
+
+/* 스프링 시큐리티 */
+
+    // 스프링 시큐리티 추가 : 로그인 처리용 p678 https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
+    implementation("org.springframework.boot:spring-boot-starter-security:3.4.7")
+
+    // 스프링 시큐리티6+타입리프 https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity6
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
+
 /* Spring MVC */
     implementation 'org.springframework.boot:spring-boot-starter-web'
     developmentOnly 'org.springframework.boot:spring-boot-devtools' // 자동 처리 등 유틸
