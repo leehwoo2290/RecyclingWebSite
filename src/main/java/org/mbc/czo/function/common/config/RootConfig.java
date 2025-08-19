@@ -34,9 +34,16 @@ public class RootConfig {
         //마지막 destination 필드명은 모든 토큰이 일치해야 한다.
         //마지막 source 필드명에는 일치하는 토큰이 하나 이상 있어야 한다.
 
+        //.setMatchingStrategy(MatchingStrategies.LOOSE
+        modelMapper.getConfiguration()
+                .setFieldMatchingEnabled(true)
+                .setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE)
+                .setMatchingStrategy(MatchingStrategies.STRICT);
+
         return modelMapper;
         // 엔티티를 dto로 변환하게 환경설정함!!
         //https://velog.io/@hjhearts/SpringModelMapper-ModelMapper%EC%82%AC%EC%9A%A9%EB%B2%95-%EC%B4%9D%EC%A0%95%EB%A6%AC
 
     }
+
 }

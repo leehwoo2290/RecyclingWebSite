@@ -6,8 +6,8 @@ import lombok.Data;
 @Data
 public class MemberFindIDDTO {
 
-    private String m_name;
+    private String mname;
 
-    private String m_phoneNumber;
+    private String mphoneNumber;
 
 }

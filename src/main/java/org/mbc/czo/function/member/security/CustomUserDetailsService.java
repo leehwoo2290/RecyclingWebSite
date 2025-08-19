@@ -9,8 +9,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -53,12 +51,16 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 
         MemberSecurityDTO memberSecurityDTO = new MemberSecurityDTO(
-                member.getM_id(),
-                member.getM_password(),
-                member.getM_email(),
-                member.isM_isActivate(),
+                member.getMid(),
+                member.getMpassword(),
+                member.getMemail(),
+                member.isMisActivate(),
                 false,  //boolean social
-                member.getM_roleSet().stream().map(memberRole ->
+                member.getMname(),
+                member.getMphoneNumber(),
+                member.getMaddress(),
+                member.getMmileage(),
+                member.getMroleSet().stream().map(memberRole ->
                                 new SimpleGrantedAuthority("ROLE_"+memberRole.name()))
                         // ROLE_USER, ROLE_ADMIN
                         .collect(Collectors.toList() // ROLE_USER, ROLE_ADMIN

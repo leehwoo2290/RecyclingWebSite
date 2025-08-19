@@ -62,6 +62,24 @@ public class  CustomSecurityConfig {
             //                            초 분 시 일 쿠기의 maxAge()
         });
 
+        http.oauth2Login(httpSecurityOAuth2LoginConfigurer -> {
+            httpSecurityOAuth2LoginConfigurer.loginPage("/member/login");
+           // httpSecurityOAuth2LoginConfigurer.successHandler(authenticationSuccessHandler()); // 761 추가 소설로그인 암호 강제 변경
+        });
+
+        http.logout(logout ->
+                logout.logoutUrl("/member/logout")          // 로그아웃 경로
+                        .logoutSuccessUrl("/member/login")    // 로그아웃 후 이동할 페이지
+                        .invalidateHttpSession(true)          // 세션 무효화
+                        .deleteCookies("JSESSIONID")          // JSESSIONID 쿠키 삭제
+                        .clearAuthentication(true)
+        );
+
+       /* // p718 403예외처리 핸들러 사용
+        http.exceptionHandling(httpSecurityExceptionHandlingConfigurer -> {
+            httpSecurityExceptionHandlingConfigurer.accessDeniedHandler(accessDeniedHandler());
+            // 하단에 메서드 추가
+        });*/
 
         return http.build();
     }

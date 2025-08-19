@@ -1,35 +1,70 @@
 package org.mbc.czo.function.member.security.dto;
 
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.mbc.czo.function.member.constant.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import java.util.Collection;
-import java.util.UUID;
+import java.util.*;
 
-public class MemberSecurityDTO extends User {
+@Getter
+@Setter
+@ToString
 
-    private String m_id;
+public class MemberSecurityDTO extends User implements OAuth2User {
 
-    private String m_email;
+    private String mid;
 
-    private String m_password;
+    private String mname;
 
-    private boolean m_isActivate;
+    private String mphoneNumber;
 
-    private boolean m_isSocialActivate;
+    private String memail;  // 회원 검색 처리용
+
+    private String mpassword;
+
+    private String maddress;
+
+    private Set<Role> mroleSet = new HashSet<Role>();
+
+    private Long mmileage;
+
+    private boolean misActivate;
+
+    private boolean misSocialActivate;
+
+    private Map<String, Object> mSocialprops;
 
     // 생성자
     public MemberSecurityDTO(String username, String password, String email,
                              boolean del, boolean social,
+                             String mname,  String mphoneNumber, String maddress, Long mmileage,
                              Collection<? extends GrantedAuthority> authorities) {
 
         super(username, password, authorities);  // User 객체
 
-        this.m_id = username;
-        this.m_password = password;
-        this.m_email = email;
-        this.m_isActivate = del;
-        this.m_isSocialActivate = social;
+        this.mid = username;
+        this.mpassword = password;
+        this.memail = email;
+        this.misActivate = del;
+        this.misSocialActivate = social;
+        this.mname = mname;
+        this.mphoneNumber = mphoneNumber;
+        this.maddress = maddress;
+        this.mmileage = mmileage;
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return this.getMSocialprops();
+    }
+
+    @Override
+    public String getName() {
+        return this.mid;
     }
 }

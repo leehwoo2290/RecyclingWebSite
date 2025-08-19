@@ -2,26 +2,24 @@ package org.mbc.czo.function.member.dto;
 
 import lombok.Data;
 
-import org.mbc.czo.function.member.constant.Role;
-
 @Data
 public class MemberJoinDTO {
 
-    private String m_id;
+    private String mid;
 
-    private String m_name;
+    private String mname;
 
-    private String m_phoneNumber;
+    private String mphoneNumber;
 
-    private String m_email;
+    private String memail;
 
-    private String m_password;
+    private String mpassword;
 
-    private String m_address;
+    private String maddress;
 
-    private Long m_mileage;
+    private Long mmileage;
 
-    private boolean m_isActivate;
+    private boolean misActivate;
 
-    private boolean m_isSocialActivate;
+    private boolean misSocialActivate;
 }

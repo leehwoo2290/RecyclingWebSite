@@ -31,7 +31,8 @@ repositories {
 
 dependencies {
     /*============================================================*/
-
+/* 썸네일 지정 */
+    implementation 'net.coobird:thumbnailator:0.4.19'
 /* 스프링 시큐리티 */
 
     // 스프링 시큐리티 추가 : 로그인 처리용 p678 https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
@@ -59,6 +60,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
+
 /* lombok 테스트용 추가 */
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
@@ -67,7 +69,17 @@ dependencies {
 // https://mvnrepository.com/artifact/org.modelmapper/modelmapper
     implementation 'org.modelmapper:modelmapper:3.1.0'
 
-// query dsl
+    /* validation */
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.2.4'
+
+    /*  카카오로그인 oauth2 추가 */
+    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-oauth2-client
+    implementation 'org.springframework.security:spring-security-oauth2-client'
+
+    //
+    implementation 'net.coobird:thumbnailator:0.4.19'
+
+    /*  섬네일 추가 */
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta"
     annotationProcessor(
             "jakarta.persistence:jakarta.persistence-api",
