@@ -1,3 +1,4 @@
+<!--
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
@@ -35,6 +36,13 @@
                         <div class="input-group mb-3">
                             <span class="input-group-text">EMAIL</span>
                             <input type="email" name="m_email" class="form-control">
+                            <button type="button" class="btn btn-outline-secondary" onclick="sendEmailCode()">인증번호 발송</button>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">EMAIL CODE</span>
+                            <input type="text" name="emailCode" id="emailCode" class="form-control">
+                            <button type="button" class="btn btn-outline-secondary" onclick="verifyEmailCode()">확인</button>
                         </div>
 
                         <div class="input-group mb-3">
@@ -54,11 +62,11 @@
                             </div>
                         </div>
                     </form>
-                </div><!--end card body-->
+                </div>&lt;!&ndash;end card body&ndash;&gt;
 
-            </div><!--end card-->
-        </div><!-- end col-->
-    </div><!-- end row-->
+            </div>&lt;!&ndash;end card&ndash;&gt;
+        </div>&lt;!&ndash; end col&ndash;&gt;
+    </div>&lt;!&ndash; end row&ndash;&gt;
 
 
 </div>
@@ -72,5 +80,137 @@
         alert("동일한 아이디를 가진 계정이 존재합니다.")
     }
 
+
+</script>
+-->
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
+
+<head>
+    <title>Member Join Page</title>
+</head>
+
+<div layout:fragment="content">
+    <div class="row mt-3">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    JOIN
+                </div>
+                <div class="card-body">
+
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">EMAIL</span>
+                        <input type="email" id="memail" class="form-control" required>
+                        <button type="button" id="sendEmailBtn" class="btn btn-outline-secondary">인증번호 발송</button>
+                    </div>
+                    <div id="emailMessage" style="color:green; margin-top:10px;"></div>
+
+                    <div id="verifySection" class="input-group mb-3" style="display:none">
+                        <span class="input-group-text">EMAIL CODE</span>
+                        <input type="text" id="emailCode" class="form-control" required>
+                        <button type="button" id="verifyBtn" class="btn btn-primary">확인</button>
+                    </div>
+                   <!--회원가입 폼 (이메일 인증 완료 후)-->
+                    <form id="registerForm" action="/member/join" method="post" style="display:none">
+                        <input type="hidden" name="memail" id="hiddenMemail">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">ID</span>
+                            <input type="text" name="mid" class="form-control" required>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">PW</span>
+                            <input type="password" name="mpassword" class="form-control" required>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">NAME</span>
+                            <input type="text" name="mname" class="form-control" required>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">PHONENUMBER</span>
+                            <input type="text" name="mphoneNumber" class="form-control">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">ADDRESS</span>
+                            <input type="text" name="maddress" class="form-control">
+                        </div>
+                        <div class="my-4">
+                            <div class="float-end">
+                                <button type="submit" class="btn btn-primary submitBtn">Submit</button>
+                                <button type="reset" class="btn btn-secondary">Reset</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("sendEmailBtn").addEventListener("click", function() {
+        const email = document.getElementById("memail").value;
+        if(!email) {
+            alert("이메일을 입력해주세요.");
+            return;
+        }
+
+        fetch(`/api/mail/send?receiver=${encodeURIComponent(email)}`)
+            .then(response => response.json())
+            .then(data => {
+                if(data.code === 200) {  // DataResponse의 success 값 확인
+                    document.getElementById("emailMessage").textContent =
+                        `인증번호가 ${email}로 발송되었습니다.`;
+                    document.getElementById("verifySection").style.display = "block";
+                    document.getElementById("emailMessage").style.color = "green";
+                    // 필요한 경우 emailSent 상태를 JS로 바꿔서 다음 폼 보여주기
+                } else {
+                    document.getElementById("emailMessage").textContent =`${data.message}`;
+                    document.getElementById("emailMessage").style.color = "red";
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                document.getElementById("emailMessage").textContent = "메일 발송 중 오류 발생";
+                document.getElementById("emailMessage").style.color = "red";
+            });
+    });
+
+    document.getElementById("verifyBtn").addEventListener("click", function() {
+        const email = document.getElementById("memail").value;
+        const code = document.getElementById("emailCode").value;
+
+        if(!code) {
+            alert("인증번호를 입력해주세요.");
+            return;
+        }
+
+        fetch('/api/mail/verify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `receiver=${encodeURIComponent(email)}&code=${encodeURIComponent(code)}`
+        })
+
+            .then(response => response.json())
+            .then(data => {
+                if(data.verified) {
+                    alert("이메일 인증 완료!");
+                    // 인증 완료 후 회원가입 폼 활성화
+                    document.getElementById("hiddenMemail").value = email;
+                    document.getElementById("registerForm").style.display = "block";
+                } else {
+                    alert("인증번호가 맞지 않습니다.");
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert("인증 중 오류 발생");
+            });
+    });
 
 </script>

@@ -53,7 +53,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
 /* DB */
-    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'						/*마리아 db 드라이버*/
+    implementation  'org.mariadb.jdbc:mariadb-java-client'						/*마리아 db 드라이버*/
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
 /* lombok 어노테이션 확장 */
@@ -78,6 +78,15 @@ dependencies {
 
     //
     implementation 'net.coobird:thumbnailator:0.4.19'
+
+    //이메일
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    // Spring Data Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // Optional: Lettuce 클라이언트 (Spring Boot 2.x 이상 기본)
+    implementation 'io.lettuce:lettuce-core'
 
     /*  섬네일 추가 */
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta"

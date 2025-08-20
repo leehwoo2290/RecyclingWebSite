@@ -27,4 +27,5 @@ public interface MemberJpaRepository extends JpaRepository<Member, String> {
     Optional<Member> findByMemail(String memail);
     // 이메일을 받아서 회원 정보를 가져옴.
 
+    void deleteByMid(String mid);
 }

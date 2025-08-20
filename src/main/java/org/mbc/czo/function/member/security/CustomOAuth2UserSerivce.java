@@ -102,7 +102,7 @@ public class CustomOAuth2UserSerivce extends DefaultOAuth2UserService {
                     .mname(name)
                     .mphoneNumber(null)
                     .memail(email)
-                    .mpassword(passwordEncoder.encode("1111"))
+                    .mpassword(passwordEncoder.encode("SOCIALLOGINREQUESTRESETPW"))
                     .maddress(null)
                     .mmileage((long)0)
                     .misSocialActivate(true) // 카카오 로그인이 시도되면 회원가입시 체크

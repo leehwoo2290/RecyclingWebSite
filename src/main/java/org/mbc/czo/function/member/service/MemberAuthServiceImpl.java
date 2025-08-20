@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -80,6 +81,58 @@ public class MemberAuthServiceImpl implements MemberAuthService {
         memberJpaRepository.save(member);
 
 
+    }
+
+    @Override
+    public void modify(String username, MemberJoinDTO membermodifyDTO) throws M_AuthException {
+
+        boolean exist = memberJpaRepository.existsById(username); // 기존에 id 있는지 boolean return
+
+        if(!exist) {
+
+            throw new M_AuthException(); // id db 재검사
+        }
+
+        Member member = Member.builder()
+                .mid(membermodifyDTO.getMid())
+                .mname(membermodifyDTO.getMname())
+                .mphoneNumber(membermodifyDTO.getMphoneNumber())
+                .memail(membermodifyDTO.getMemail())
+                .mpassword(membermodifyDTO.getMpassword())
+                .maddress(membermodifyDTO.getMaddress())
+                .mmileage(membermodifyDTO.getMmileage())
+                .misSocialActivate(membermodifyDTO.isMisSocialActivate())
+                .build();
+        member.addRole(Role.USER);
+
+        memberJpaRepository.save(member);
+    }
+
+    @Transactional
+    @Override
+    public void delete(String username, String checkPassword) throws M_AuthException {
+
+        Optional<Member> result = memberJpaRepository.findById(username);
+        log.info("delete service 시작");
+        if(result.isEmpty()){
+            // 해당하는 정보가 db에 없으면
+            //id 찾기 실패
+            log.info("id없음");
+            throw new M_AuthException();
+        }
+        Member member = result.get(); // 해당하는 member가 있으면 넣음
+
+        String memberPW = member.getMpassword();
+
+        //최종 비밀번호 확인
+        if(!checkPassword.equals(memberPW)
+                && !passwordEncoder.matches(checkPassword,memberPW)){
+            //비밀번호 확인 오류
+            log.info("비번다름");
+            throw new M_AuthException();
+        }
+        log.info("deleteByMid실행: " + username);
+        memberJpaRepository.deleteByMid(username);
     }
 
 }

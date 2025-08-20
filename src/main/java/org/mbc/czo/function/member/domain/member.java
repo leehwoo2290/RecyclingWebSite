@@ -29,7 +29,7 @@ public class Member {
     private String mid;
 
     @NotNull
-    @Column(name="member_name", length = 10)
+    @Column(name="member_name", length = 255)
     private String mname;
 
     @NotNull
@@ -70,7 +70,6 @@ public class Member {
     @PrePersist //db 저장 전 실행(초기화)
     public void prePersist() {
         this.misActivate = true;
-        this.misSocialActivate = false;
     }
 
     public static Member createMember(MemberJoinDTO memberJoinDTO, PasswordEncoder passwordEncoder){

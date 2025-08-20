@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>비밀번호 찾기</title>
+    <style>
+        .error { color: red; }
+    </style>
+</head>
+<body>
+<h1>비밀번호 찾기</h1>
+
+<!-- 메시지 출력 -->
+<div th:if="${message}" th:text="${message}"
+     th:class="${status}"></div>
+
+<!-- 비밀번호 찾기 폼 -->
+<form action="/member/findPW" method="post">
+    <input type="text" name="mid" placeholder="아이디">
+    <input type="text" name="mname" placeholder="이름">
+    <button type="submit">비밀번호 찾기</button>
+</form>
+
+</body>
+</html>

@@ -13,4 +13,6 @@ public interface MemberAuthService {
 
     public void join(MemberJoinDTO memberJoinDTO)throws M_AuthException;
     public void resetPW(MemberResetPWDTO memberResetPWDTO, String changePWAccountID)throws M_AuthException;
+    public void modify(String username, MemberJoinDTO membermodifyDTO)throws M_AuthException;
+    public void delete(String username, String checkPassword)throws M_AuthException;
 }

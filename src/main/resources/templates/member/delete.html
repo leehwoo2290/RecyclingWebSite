@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete</title>
+</head>
+<body>
+<form id="deleteAccountForm" th:action="@{/member/delete}" method="post">
+    <p>계정을 삭제하면 모든 데이터가 사라집니다. 정말 삭제하시겠습니까?</p>
+    <input type="password" name="checkPassword" placeholder="비밀번호 확인" required />
+    <button type="submit">계정 삭제</button>
+</form>
+
+<!-- 실패 메시지 alert -->
+<div th:if="${message}">
+    <script th:inline="javascript">
+        alert([[${message}]]);
+    </script>
+</div>
+</body>
+</html>

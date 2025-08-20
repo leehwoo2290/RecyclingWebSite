@@ -1,10 +1,3 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/basic.html}">
-<!--/*     상단에 layout:decorator="~{layout/layout}" 은 기본 레이아웃을 layout/layout.html 파일을 사용하겠다라는 선언하는 것 입니다.*/-->
-<div layout:fragment="content">
-
 <div class="container-fluid d-flex justify-content-center" style="height: 100vh">
 
     <div class="card align-self-center">
@@ -16,7 +9,7 @@
             <th:block th:if="${param.logout != null}">  <!--파라미터에 logout이 있으면 -->
                 <h1>Logout(로그아웃 처리 됨)........</h1>
             </th:block>
-                                                        <!--  701        th:if="${param.logout == null}"  logout 없으면 로그인 창-->
+            <!--  701        th:if="${param.logout == null}"  logout 없으면 로그인 창-->
             <form id="registerForm" action="/member/login" method="post">
                 <div class="input-group mb-3">
                     <span class="input-group-text">아이디</span>
@@ -42,7 +35,7 @@
 
                 <div>
                     <a href="/member/findID">아이디 찾기</a>
-                    <a href="/member/login">비밀번호 찾기</a>
+                    <a href="/member/findPW">비밀번호 찾기</a>
                 </div>
 
             </form>
@@ -50,12 +43,26 @@
                 <a href="/member/join">회원가입</a>
             </div>
 
-            <div>
-                <a href="/oauth2/authorization/kakao">카카오톡로그인</a>
-            </div>
+             <div>
+                 <!--<a href="/oauth2/authorization/kakao">카카오톡로그인</a>-->
+                 <button onclick="openKakaoLogin()">카카오 로그인</button>
+             </div>
         </div><!--end card body-->
     </div><!--end card-->
 </div>
 </div>
 </body>
 </html>
+
+<button onclick="openKakaoLogin()">카카오 회원가입 / 로그인</button>
+
+<script>
+    function openKakaoLogin() {
+        const url = '/oauth2/authorization/kakao';
+
+        const width = 500, height = 700;
+        const left = (window.innerWidth - width) / 2;
+        const top = (window.innerHeight - height) / 2;
+        window.open(url, 'kakaoLogin', `width=${width},height=${height},top=${top},left=${left}`);
+    }
+</script>

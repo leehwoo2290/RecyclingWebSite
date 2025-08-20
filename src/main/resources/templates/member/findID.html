@@ -1,23 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>findID</title>
+    <title>아이디 찾기</title>
+    <style>
+        .success { color: green; }
+        .error { color: red; }
+    </style>
 </head>
 <body>
+<h1>아이디 찾기</h1>
 
-<form id="registerForm" action="/member/findID" method="post">
-    <div class="input-group mb-3">
-        <span class="input-group-text">이름</span>
-        <input type="text" name="username" class="form-control" placeholder="USER ID">
-    </div>
-    <div class="input-group mb-3">
-        <span class="input-group-text">가입 이메일주소</span>
-        <input type="email" name="m_email" class="form-control">
+<!-- 메시지 출력 -->
+<div th:if="${message}" th:text="${message}"
+     th:class="${status}"></div>
 
-    </div>
+<!-- 아이디 출력 -->
+<p th:if="${findID}">
+    회원님의 아이디는 <strong th:text="${findID}"></strong> 입니다.
+</p>
 
-
+<!-- 아이디 찾기 폼 -->
+<form action="/member/findID" method="post">
+    <input type="text" name="mname" placeholder="이름">
+    <input type="text" name="mphoneNumber" placeholder="휴대폰번호">
+    <button type="submit">아이디 찾기</button>
 </form>
 
 </body>

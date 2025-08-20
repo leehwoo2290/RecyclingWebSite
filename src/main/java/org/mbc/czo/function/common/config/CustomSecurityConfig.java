@@ -3,6 +3,7 @@ package org.mbc.czo.function.common.config;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.mbc.czo.function.member.security.CustomUserDetailsService;
+import org.mbc.czo.function.member.security.handler.CustomSocialLoginSuccessHandler;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
@@ -41,6 +43,12 @@ public class  CustomSecurityConfig {
             form.loginPage("/member/login");
         });
 
+        http.oauth2Login(httpSecurityOAuth2LoginConfigurer -> {
+            httpSecurityOAuth2LoginConfigurer.loginPage("/member/login");
+            httpSecurityOAuth2LoginConfigurer.successHandler(authenticationSuccessHandler()); //  소설로그인 암호 강제 변경
+        });
+
+
         // http.csrf().disable()
         // 6.1 버전에서 제외 됨 (스프링 3.0이후 버전에서는 사용 안됨)
         // 람다식으로 사용할 것을 권고 함. 아래로 변경
@@ -62,18 +70,24 @@ public class  CustomSecurityConfig {
             //                            초 분 시 일 쿠기의 maxAge()
         });
 
-        http.oauth2Login(httpSecurityOAuth2LoginConfigurer -> {
-            httpSecurityOAuth2LoginConfigurer.loginPage("/member/login");
-           // httpSecurityOAuth2LoginConfigurer.successHandler(authenticationSuccessHandler()); // 761 추가 소설로그인 암호 강제 변경
-        });
-
         http.logout(logout ->
                 logout.logoutUrl("/member/logout")          // 로그아웃 경로
-                        .logoutSuccessUrl("/member/login")    // 로그아웃 후 이동할 페이지
+                        .logoutSuccessUrl("/")    // 로그아웃 후 이동할 페이지
                         .invalidateHttpSession(true)          // 세션 무효화
                         .deleteCookies("JSESSIONID")          // JSESSIONID 쿠키 삭제
                         .clearAuthentication(true)
         );
+
+        http.authorizeHttpRequests(authorizeHttpRequests -> {
+            authorizeHttpRequests
+                    .requestMatchers("/api/mail/**").permitAll()
+                    .requestMatchers("/").permitAll()
+                    .requestMatchers(
+                            "/member/login", "/member/join", "/member/findID",
+                            "/member/findPW", "/member/resetPW").permitAll()
+                    // /admin/하위 메서드는 ADMIN 룰에 적용됨.
+                    .anyRequest().authenticated();
+        })  ;
 
        /* // p718 403예외처리 핸들러 사용
         http.exceptionHandling(httpSecurityExceptionHandlingConfigurer -> {
@@ -107,5 +121,10 @@ public class  CustomSecurityConfig {
         log.info("======= persistentTokenRepository 토큰생성기법 호출 =======");
         return jdbcTokenRepository;
         //https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/web/authentication/rememberme/PersistentTokenRepository.html
+    }
+
+    @Bean //커스텀 소설로그인 성공클래스 사용
+    public AuthenticationSuccessHandler authenticationSuccessHandler(){
+        return new CustomSocialLoginSuccessHandler(passwordEncoder());
     }
 }

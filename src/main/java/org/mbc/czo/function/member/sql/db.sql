@@ -1,4 +1,5 @@
-delete from member where member_id = 'lee';
+drop table member_mrole_set;
+delete from member where member_id = 'leehwoo0119@naver.com';
 
 drop table member;
 SET foreign_key_checks = 1;

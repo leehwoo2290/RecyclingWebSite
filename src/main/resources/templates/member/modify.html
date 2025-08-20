@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>비밀번호 수정</title>
+</head>
+<body>
+<!-- 추후 서 #authentication.principal로 바꾸는거 생각 -->
+<div class="card-body">
+    <form id="registerForm" action="/member/modify" method="post">
+        <div class="input-group mb-3">
+            <span class="input-group-text">ID</span>
+            <input type="text" name="mid" class="form-control"
+                   th:value="${#authentication.principal.mid}" readonly>
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text">PW</span>
+            <input type="password" class="form-control" name="mpassword" placeholder="비밀번호">
+        </div>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text">PWCHECK</span>
+            <input type="password" class="form-control" name="mpasswordcheck" placeholder="비밀번호 확인">
+        </div>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text">NAME</span>
+            <input type="text" name="mname" class="form-control"
+                   th:value="${#authentication.principal.mname}">
+        </div>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text">PHONENUMBER</span>
+            <input type="text" name="mphoneNumber" class="form-control"
+                   th:value="${#authentication.principal.mphoneNumber}" readonly>
+        </div>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text">EMAIL</span>
+            <input type="email" name="memail" class="form-control"
+                   th:value="${#authentication.principal.memail}" readonly>
+        </div>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text">ADDRESS</span>
+            <input type="text" name="maddress" class="form-control"
+                   th:value="${#authentication.principal.maddress}" readonly>
+        </div>
+
+        <div class="my-4">
+            <div class="float-end">
+                <button type="submit" class="btn btn-primary submitBtn">Submit</button>
+                <button type="reset" class="btn btn-secondary">Reset</button>
+            </div>
+        </div>
+    </form>
+</div><!--end card body-->
+
+</body>
+</html>
+
+<script>
+    document.getElementById("registerForm").addEventListener("submit", function(event) {
+        const password = document.querySelector("input[name='mpassword']").value;
+        const passwordCheck = document.querySelector("input[name='mpasswordcheck']").value;
+
+        if (password !== passwordCheck) {
+            event.preventDefault(); // 폼 제출 막기
+            alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+            return false;
+        }
+    });
+</script>
