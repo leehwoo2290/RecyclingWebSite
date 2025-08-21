@@ -32,7 +32,7 @@
         <div class="input-group mb-3">
             <span class="input-group-text">PHONENUMBER</span>
             <input type="text" name="mphoneNumber" class="form-control"
-                   th:value="${#authentication.principal.mphoneNumber}" readonly>
+                   th:value="${#authentication.principal.mphoneNumber}">
         </div>
 
         <div class="input-group mb-3">
@@ -41,10 +41,23 @@
                    th:value="${#authentication.principal.memail}" readonly>
         </div>
 
-        <div class="input-group mb-3">
-            <span class="input-group-text">ADDRESS</span>
-            <input type="text" name="maddress" class="form-control"
-                   th:value="${#authentication.principal.maddress}" readonly>
+        <div>
+            <input type="text" id="mpostcode" name="mpostcode"
+                th:value="${(#authentication.principal.mpostcode != null and #authentication.principal.mpostcode != '') ? #authentication.principal.mpostcode : '우편번호'}">
+            <input type="text" id="maddress" name="maddress"
+                th:value="${(#authentication.principal.maddress != null and #authentication.principal.maddress != '') ? #authentication.principal.maddress : '주소'}">>
+            <input type="text" id="mdetailAddress" name="mdetailAddress"
+                th:value="${(#authentication.principal.mdetailAddress != null and #authentication.principal.mdetailAddress != '') ? #authentication.principal.mdetailAddress : '상세 주소'}">>
+            <button type="button" id="addrBtn">주소 검색</button>
+        </div>
+
+        <div>
+            <input type="file" id="profileInput" data-type="profile">
+                <button type="button" class="uploadBtn"
+                    data-type="profile"
+                    th:attr="data-user-id=${#authentication.principal.mid}">
+                업로드
+                </button>
         </div>
 
         <div class="my-4">
@@ -59,6 +72,10 @@
 </body>
 </html>
 
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="/js/addAddressDetails.js"></script>
+
+<script type="module" th:src="@{/js/uploadImages.js}"></script>
 <script>
     document.getElementById("registerForm").addEventListener("submit", function(event) {
         const password = document.querySelector("input[name='mpassword']").value;

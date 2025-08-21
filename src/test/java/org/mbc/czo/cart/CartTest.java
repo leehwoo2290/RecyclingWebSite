@@ -36,12 +36,12 @@ class CartTest {
     EntityManager em;
 
     public Member createMember() {
-        MemberFormDTO memberFormDTO = new MemberFormDTO();
+       /* MemberFormDTO memberFormDTO = new MemberFormDTO();
         memberFormDTO.setEmail("test@email.com");
         memberFormDTO.setName("홍길동");
         memberFormDTO.setAddress("수원시 팔달구");
         memberFormDTO.setPassword("1234");
-        return Member.createMember(memberFormDTO, passwordEncoder);
+        return Member.createMember(memberFormDTO, passwordEncoder);*/
 
     }
 

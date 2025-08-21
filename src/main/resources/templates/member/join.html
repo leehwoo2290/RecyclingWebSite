@@ -135,10 +135,12 @@
                             <span class="input-group-text">PHONENUMBER</span>
                             <input type="text" name="mphoneNumber" class="form-control">
                         </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">ADDRESS</span>
-                            <input type="text" name="maddress" class="form-control">
-                        </div>
+
+                        <input type="text" id="mpostcode" name="mpostcode" placeholder="우편번호" readonly>
+                        <input type="text" id="maddress" name="maddress" placeholder="주소" readonly>
+                        <input type="text" id="mdetailAddress" name="mdetailAddress" placeholder="상세주소">
+                        <button type="button" id="addrBtn">주소 검색</button>
+
                         <div class="my-4">
                             <div class="float-end">
                                 <button type="submit" class="btn btn-primary submitBtn">Submit</button>
@@ -151,6 +153,9 @@
         </div>
     </div>
 </div>
+
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="/js/addAddressDetails.js"></script>
 
 <script>
     document.getElementById("sendEmailBtn").addEventListener("click", function() {
@@ -213,4 +218,4 @@
             });
     });
 
-</script>
+

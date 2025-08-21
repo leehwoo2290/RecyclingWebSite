@@ -15,7 +15,11 @@ public class MemberJoinDTO {
 
     private String mpassword;
 
+    private String mpostcode;
+
     private String maddress;
+
+    private String mdetailAddress;
 
     private Long mmileage;
 

@@ -7,7 +7,11 @@ import org.mbc.czo.function.member.domain.Member;
 import org.mbc.czo.function.member.dto.MemberJoinDTO;
 import org.mbc.czo.function.member.dto.MemberResetPWDTO;
 import org.mbc.czo.function.member.repository.MemberJpaRepository;
+import org.mbc.czo.function.member.security.dto.MemberSecurityDTO;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,11 +39,12 @@ public class MemberAuthServiceImpl implements MemberAuthService {
         }
 
         // 진짜 회원가입처리
-        Member member = modelMapper.map(memberJoinDTO, Member.class);
+       /* Member member = modelMapper.map(memberJoinDTO, Member.class);
         // 엔티티                              dto
 
        // member.setM_password(memberJoinDTO.getM_password());
-        member.setMpassword(passwordEncoder.encode(memberJoinDTO.getMpassword()));
+        member.setMpassword(passwordEncoder.encode(memberJoinDTO.getMpassword()));*/
+        Member member =  Member.createMember(memberJoinDTO, passwordEncoder);
         member.addRole(Role.USER);
 
         log.info("==============join===============");
@@ -86,26 +91,37 @@ public class MemberAuthServiceImpl implements MemberAuthService {
     @Override
     public void modify(String username, MemberJoinDTO membermodifyDTO) throws M_AuthException {
 
-        boolean exist = memberJpaRepository.existsById(username); // 기존에 id 있는지 boolean return
+        Optional<Member> result = memberJpaRepository.findById(username);
 
-        if(!exist) {
+        if(result.isEmpty()){
+            // 해당하는 정보가 db에 없으면
+            //id 찾기 실패
 
-            throw new M_AuthException(); // id db 재검사
+            throw new M_AuthException();
         }
 
-        Member member = Member.builder()
-                .mid(membermodifyDTO.getMid())
-                .mname(membermodifyDTO.getMname())
-                .mphoneNumber(membermodifyDTO.getMphoneNumber())
-                .memail(membermodifyDTO.getMemail())
-                .mpassword(membermodifyDTO.getMpassword())
-                .maddress(membermodifyDTO.getMaddress())
-                .mmileage(membermodifyDTO.getMmileage())
-                .misSocialActivate(membermodifyDTO.isMisSocialActivate())
-                .build();
-        member.addRole(Role.USER);
+        Member member = result.get(); // 해당하는 member가 있으면 넣음
+        member.updateMember(membermodifyDTO);
+       /* Member member =  Member.createMember(membermodifyDTO, passwordEncoder);
+        member.addRole(Role.USER);*/
 
         memberJpaRepository.save(member);
+
+        // SecurityContext 갱신
+        refreshAuthentication(member);
+    }
+
+    private void refreshAuthentication(Member member) {
+        MemberSecurityDTO updatedDTO = MemberSecurityDTO.createMemberSecurityDTO(member, member.isMisSocialActivate());
+
+        Authentication newAuth = new UsernamePasswordAuthenticationToken(
+                updatedDTO,
+                updatedDTO.getPassword(),
+                updatedDTO.getAuthorities()
+        );
+        //modify 이후 변경된 값을 SecurityContext에 저장 → 현재 로그인 상태의 인증 정보 갱신
+        //즉 modify되도 세션에서 변경내용 감지
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
     @Transactional

@@ -37,11 +37,12 @@ public class  CustomSecurityConfig {
 
         log.info("----------------CustomSecurityConfig.filterChain()----------------------");
 
-        http.formLogin(form -> {
-            // 시큐리티 6버전이상에서는 람다식 으로 변환하여 사용됨.
-            log.info("======= 커스텀한 로그인 페이지 호출=======");
-            form.loginPage("/member/login");
-        });
+        http.formLogin(form -> form
+                .loginPage("/member/login")
+                .loginProcessingUrl("/member/login")
+                .defaultSuccessUrl("/", true)   // 로그인 성공 시 항상 루트로 이동
+                .failureUrl("/member/login?error=true")
+        );
 
         http.oauth2Login(httpSecurityOAuth2LoginConfigurer -> {
             httpSecurityOAuth2LoginConfigurer.loginPage("/member/login");
@@ -80,6 +81,9 @@ public class  CustomSecurityConfig {
 
         http.authorizeHttpRequests(authorizeHttpRequests -> {
             authorizeHttpRequests
+                    .requestMatchers("/uploads/**").permitAll() // <- 이미지 서버 업로드
+                    .requestMatchers("/.well-known/**").permitAll() // well-known에러는 무시해도 되지만 신경쓰이니 처리
+                    .requestMatchers("/js/**", "/uploads/**").permitAll()
                     .requestMatchers("/api/mail/**").permitAll()
                     .requestMatchers("/").permitAll()
                     .requestMatchers(

@@ -105,7 +105,7 @@ public class MemberAuthController {
 
         }
 
-        return "redirect:/member/resetPW"; //성공
+        return "redirect:/"; //성공
     }
     @PreAuthorize("isAuthenticated()") // 로그인한 상태이면!!! (권한에 상관없음)
     @GetMapping("/member/modify")

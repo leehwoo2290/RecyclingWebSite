@@ -3,6 +3,7 @@ package org.mbc.czo.function.member.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
+import org.mbc.czo.function.image.domain.MemberProfileImage;
 import org.mbc.czo.function.member.constant.Role;
 import org.mbc.czo.function.member.dto.MemberJoinDTO;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,9 +45,14 @@ public class Member {
     @Column(name="member_password", length = 255) //암호화 시 글자 수 늘어남에 따른 length 증가
     private String mpassword;
 
-    @NotNull
+    @Column(name="member_postcode", length = 100)
+    private String mpostcode;
+
     @Column(name="member_address", length = 100)
     private String maddress;
+
+    @Column(name="member_detailAddress", length = 100)
+    private String mdetailAddress;
 
     // 회원롤 관리(user,admin)
     @Column(name="member_roleSet")
@@ -56,6 +62,16 @@ public class Member {
 
     @Column(name="member_mileage")
     private Long mmileage;
+
+    //mappedBy는 **양방향 연관관계에서 "주인이 아닌 쪽"**을 나타냄
+    //MemberProfileImage가 주인(Owner)
+    //매핑 정보를 주인쪽(MemberProfileImage.member)에서 가져온다는 뜻, 그러므로 db테이블에는 안생김
+
+    //fetch = FetchType.LAZY 지연 로딩
+    //Member를 조회할 때 바로 profileImage를 불러오지 않고, 실제로 접근할 때 DB에서 가져옴
+    //MODIFY에서만 생성되므로 생성자에 X
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private MemberProfileImage profileImage;
 
     @Column(name = "member_isActivate")
     private boolean misActivate;
@@ -72,16 +88,31 @@ public class Member {
         this.misActivate = true;
     }
 
-    public static Member createMember(MemberJoinDTO memberJoinDTO, PasswordEncoder passwordEncoder){
-        Member member = new Member();
-        member.setMid(memberJoinDTO.getMid());
-        member.setMname(memberJoinDTO.getMname());
-        member.setMphoneNumber(memberJoinDTO.getMphoneNumber());
-        member.setMemail(memberJoinDTO.getMemail());
-        member.setMpassword(passwordEncoder.encode(memberJoinDTO.getMpassword()));
-        member.setMaddress(memberJoinDTO.getMaddress());
-        member.addRole(Role.USER);
-        return member;
-    } // 회원 생성용 메서드 (dto와 암호화를 받아 Member 객체 리턴)
+    public static Member createMember(MemberJoinDTO memberJoinDTO, PasswordEncoder passwordEncoder) {
+        return Member.builder()
+                .mid(memberJoinDTO.getMid())
+                .mname(memberJoinDTO.getMname())
+                .mphoneNumber(memberJoinDTO.getMphoneNumber())
+                .memail(memberJoinDTO.getMemail())
+                .mpassword(passwordEncoder.encode(memberJoinDTO.getMpassword()))
+                .mpostcode(memberJoinDTO.getMpostcode())
+                .maddress(memberJoinDTO.getMaddress())
+                .mdetailAddress(memberJoinDTO.getMdetailAddress())
+                .mmileage(memberJoinDTO.getMmileage())
+                .misSocialActivate(memberJoinDTO.isMisSocialActivate())
+                .build();
+    }
+
+    public void updateMember(MemberJoinDTO memberModifyDTO) {
+        this.mid = memberModifyDTO.getMid();
+        this.mname = memberModifyDTO.getMname();
+        this.mphoneNumber = memberModifyDTO.getMphoneNumber();
+        this.memail = memberModifyDTO.getMemail();
+        this.mpassword = memberModifyDTO.getMpassword();
+        this.mpostcode = memberModifyDTO.getMpostcode();
+        this.maddress = memberModifyDTO.getMaddress();
+        this.mdetailAddress = memberModifyDTO.getMdetailAddress();
+        this.mmileage = memberModifyDTO.getMmileage();
+    }
 
 }

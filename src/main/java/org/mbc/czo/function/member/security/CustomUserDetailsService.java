@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.mbc.czo.function.member.security.dto.MemberSecurityDTO.createMemberSecurityDTO;
+
 @Log4j2
 @Service
 @RequiredArgsConstructor
@@ -48,24 +50,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         Member member = result.get(); // 해당하는 member가 있으면 넣음
 
+        MemberSecurityDTO memberSecurityDTO =  createMemberSecurityDTO(member, false);
 
-
-        MemberSecurityDTO memberSecurityDTO = new MemberSecurityDTO(
-                member.getMid(),
-                member.getMpassword(),
-                member.getMemail(),
-                member.isMisActivate(),
-                false,  //boolean social
-                member.getMname(),
-                member.getMphoneNumber(),
-                member.getMaddress(),
-                member.getMmileage(),
-                member.getMroleSet().stream().map(memberRole ->
-                                new SimpleGrantedAuthority("ROLE_"+memberRole.name()))
-                        // ROLE_USER, ROLE_ADMIN
-                        .collect(Collectors.toList() // ROLE_USER, ROLE_ADMIN
-              )
-        );
         log.info("CustomUserDetailsService.loadUserByUsername 메서드 실행.....");
         log.info("memberSecurityDTO :" + memberSecurityDTO);
 

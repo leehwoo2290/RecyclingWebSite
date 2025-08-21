@@ -19,6 +19,9 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.mbc.czo.function.member.security.dto.MemberSecurityDTO.createMemberSecurityDTO;
+
+
 @Log4j2
 @Service
 @RequiredArgsConstructor
@@ -96,14 +99,16 @@ public class CustomOAuth2UserSerivce extends DefaultOAuth2UserService {
         if(result.isEmpty()){
 
             log.info("===========카카오 회원가입=============");
-            // 회원 추가
+            // 회원 추가 (임시로 넣는 값들 떄문에 createmember안씀)
             Member member = Member.builder()
                     .mid(email)
                     .mname(name)
                     .mphoneNumber(null)
                     .memail(email)
                     .mpassword(passwordEncoder.encode("SOCIALLOGINREQUESTRESETPW"))
+                    .mpostcode(null)
                     .maddress(null)
+                    .mdetailAddress(null)
                     .mmileage((long)0)
                     .misSocialActivate(true) // 카카오 로그인이 시도되면 회원가입시 체크
                     .build();
@@ -112,22 +117,8 @@ public class CustomOAuth2UserSerivce extends DefaultOAuth2UserService {
             log.info("저장하려는 mid = {}", member.getMid());
             memberJpaRepository.save(member); // db에 저장됨!
             log.info("저장하려는 memberSecurityDTO = {}", member.toString());
-            MemberSecurityDTO memberSecurityDTO = new MemberSecurityDTO(
-                    member.getMid(),
-                    member.getMpassword(),
-                    member.getMemail(),
-                    member.isMisActivate(),
-                    member.isMisSocialActivate(),  //boolean social
-                    member.getMname(),
-                    member.getMphoneNumber(),
-                    member.getMaddress(),
-                    member.getMmileage(),
-                    member.getMroleSet().stream().map(memberRole ->
-                                    new SimpleGrantedAuthority("ROLE_"+memberRole.name()))
-                            // ROLE_USER, ROLE_ADMIN
-                            .collect(Collectors.toList() // ROLE_USER, ROLE_ADMIN
-                            )
-            );
+
+            MemberSecurityDTO memberSecurityDTO =  createMemberSecurityDTO(member, true);
 
             memberSecurityDTO.setMSocialprops(params);
             // db저장 성공 후에 프론트로 dto를 보냄
@@ -144,22 +135,7 @@ public class CustomOAuth2UserSerivce extends DefaultOAuth2UserService {
             // 또 회원가입할 필요가 없다!!!!
             Member member = result.get(); // member엔티티 값을 가져와
 
-            MemberSecurityDTO memberSecurityDTO = new MemberSecurityDTO(
-                    member.getMid(),
-                    member.getMpassword(),
-                    member.getMemail(),
-                    member.isMisActivate(),
-                    false,  //boolean social
-                    member.getMname(),
-                    member.getMphoneNumber(),
-                    member.getMaddress(),
-                    member.getMmileage(),
-                    member.getMroleSet().stream().map(memberRole ->
-                                    new SimpleGrantedAuthority("ROLE_"+memberRole.name()))
-                            // ROLE_USER, ROLE_ADMIN
-                            .collect(Collectors.toList() // ROLE_USER, ROLE_ADMIN
-                            )
-            );
+            MemberSecurityDTO memberSecurityDTO =  createMemberSecurityDTO(member,false);
 
             return memberSecurityDTO;
         }

@@ -37,11 +37,12 @@ public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHan
                 || passwordEncoder.matches("SOCIALLOGINREQUESTRESETPW",memberSecurityDTO.getMpassword()))){
             // 소셜 이고 SOCIALLOGINREQUESTRESETPW 이거나 인코딩된암호가 SOCIALLOGINREQUESTRESETPW 이면
             // 자동가입된 사용자기 때문에 암호 변경을 강제로 시킨다.
-
+            log.info("authentication.matches()");
             response.sendRedirect("/member/socialModifyPopupRedirect.html"); // 컨트롤러 생성 필수
 
             return  ;
         }else {
+            log.info("authentication.notmatches()");
             response.sendRedirect("/member/socialLoginPopupClose.html"); // 로그인 성공시 main.html이동
         }
     }
