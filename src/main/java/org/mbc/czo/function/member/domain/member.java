@@ -103,12 +103,12 @@ public class Member {
                 .build();
     }
 
-    public void updateMember(MemberJoinDTO memberModifyDTO) {
+    public void updateMember(MemberJoinDTO memberModifyDTO, PasswordEncoder passwordEncoder) {
         this.mid = memberModifyDTO.getMid();
         this.mname = memberModifyDTO.getMname();
         this.mphoneNumber = memberModifyDTO.getMphoneNumber();
         this.memail = memberModifyDTO.getMemail();
-        this.mpassword = memberModifyDTO.getMpassword();
+        this.mpassword = passwordEncoder.encode(memberModifyDTO.getMpassword());
         this.mpostcode = memberModifyDTO.getMpostcode();
         this.maddress = memberModifyDTO.getMaddress();
         this.mdetailAddress = memberModifyDTO.getMdetailAddress();

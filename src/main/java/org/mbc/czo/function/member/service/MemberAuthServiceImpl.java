@@ -101,7 +101,7 @@ public class MemberAuthServiceImpl implements MemberAuthService {
         }
 
         Member member = result.get(); // 해당하는 member가 있으면 넣음
-        member.updateMember(membermodifyDTO);
+        member.updateMember(membermodifyDTO, passwordEncoder);
        /* Member member =  Member.createMember(membermodifyDTO, passwordEncoder);
         member.addRole(Role.USER);*/
 
