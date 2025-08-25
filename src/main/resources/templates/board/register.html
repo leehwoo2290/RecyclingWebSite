@@ -4,59 +4,63 @@
       layout:decorate="~{layout/basic.html}">
 
 <head>
-    <title>Board Register</title>
+
+    <div layout:fragment="content">
+        <link rel="stylesheet" href="/css/style.css">
+
+
 </head>
 
-<div layout:fragment="content">
-    <div class="row mt-3">
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    Board Register
-                </div>
-                <div class="card-body">
-                    <form action="/board/register" method="post">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Title</span>
-                            <input type="text" name="title" class="form-control" placeholder="Title">
-                        </div>
 
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Content</span>
-                            <textarea class="form-control col-sm-5" rows="5" name="content"></textarea>
-                        </div>
+<body>
+<div class="board-container">
+    <div class="board-header">게시판</div>
 
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Writer</span>
-                            <input type="text" name="writer" class="form-control" placeholder="Writer">
+    <form th:action="@{/board/register}" method="post" th:object="${dto}">
+        <div class="board-item">
+            <div class="board-label">제목</div>
+            <div class="board-value">
+                <input type="text" th:field="*{title}" class="clean-input" placeholder="제목을 세 글자 이상 입력하세요" />
+            </div>
+        </div>
 
-                        </div>
+       <!-- <div th:if="${#authentication.principal?.role == 'ADMIN'}">-->
+            <label><input type="checkbox" th:field="*{notice}"> 공지글</label>
 
-                        <div class="my-4">
-                            <div class="float-end">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                                <button type="reset" class="btn btn-secondary">Reset</button>
-                            </div>
-                        </div>
-                    </form>
-                </div><!--end card body-->
 
-            </div><!--end card-->
-        </div><!-- end col-->
-    </div><!-- end row-->
-</div>
-<script layout:fragment="script" th:inline="javascript">
+        <div class="board-item">
+            <div class="board-label">내용</div>
+            <div class="board-value board-content">
+                <textarea th:field="*{content}" class="clean-input" rows="5" placeholder="내용을 입력하세요"></textarea>
+            </div>
+        </div>
 
-    const errors = [[${errors}]]
-    console.log(errors)
+        <!-- <div class="board-item" th:if="${user.role eq 'ADMIN'}">-->
+        <div class="board-item">
+            <div class="board-label">작성자</div>
+            <div class="board-value">
+                <input type="text" th:field="*{writer}" class="clean-input" placeholder="작성자를 입력하세요" />
+            </div>
+        </div>
 
-    let errorMsg = ''
+        <input type="file" name="image">
+        <button type="submit" class="btn btn-submit">사진 등록</button>
 
-    if(errors){
-        for (let i = 0; i < errors.length; i++) {
-            errorMsg += `${errors[i].field}은(는) ${errors[i].code} \n`
-        }
-        alert(errorMsg)
-    }
 
-</script>
+        <div class="float-end">
+            <button type="submit" class="btn btn-submit">작성하기</button>
+        </div>
+    </form>
+
+
+
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+
+</body>
+</html>

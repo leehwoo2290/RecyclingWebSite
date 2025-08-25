@@ -1,60 +1,200 @@
-<div class="container-fluid d-flex justify-content-center" style="height: 100vh">
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
+<meta charset="UTF-8">
+
+
+<head>
+
+        <div layout:fragment="content">
+            <link rel="stylesheet" href="/css/style.css">
+            <style>
+                /* 카드 영역 */
+                .card {
+                    border: none;
+                    box-shadow: none;
+                }
+                .card-body {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;  /* 가로축 가운데 */
+                    justify-content: center; /* 세로축 가운데 */
+                    text-align: center;
+                }
+
+                /* 카드 헤더 */
+                .card-header {
+                    font-size: 15px;
+                    font-weight: bold;
+                    color: #009879;
+                    background: none;
+                    border: none;
+                    padding-left: 0;
+                }
+
+                .loginPage {
+                    font-size: 25px;
+                    font-weight: bold;
+                    color: #009879;
+                    background: none;
+                    border: none;
+                    padding-left: 0;
+                }
+
+                .form-control {
+                    border: 2px dashed #009879;  /* 점선 */
+                    padding: 10px;              /* 내부 여백 */
+                    border-radius: 6px;         /* 패더 넣음 */
+                    font-size: 14px;
+                    text-align: left; /* 텍스트 왼쪽 정렬 */
+                }
+
+                .text-success {
+                    color: #009879 !important;  /* 초록색 */
+                    text-decoration: none;      /* 밑줄 제거 */
+                    font-weight: 500;
+                }
+
+                .text-success:hover {
+                    text-decoration: underline; /* hover 시만 밑줄 */
+                    color: #007d63;            /* hover 시 진한 초록 */
+                }
+
+                .table th {
+                    font-weight: 600;
+                    color: #009879;
+                    border-bottom: 2px solid #009879;
+                    padding: 12px;
+                    text-align: center;
+                }
+
+                .table td {
+                    border-bottom: 1px solid #009879;
+                    padding: 12px;
+                    text-align: center;
+                    color: #333;
+                }
+
+                /* 행 hover 효과 */
+                .table tbody tr:hover {
+                    background-color: #f8fdfb;
+                }
+
+
+
+                .page-item.active .page-link {
+                    background-color: #009879;
+                    color: #fff;
+                    border-radius: 4px;
+                    padding: 6px 12px;
+                }
+
+                /* 로그인 버튼 */
+                .btn-login {
+                    background-color: #009879;
+                    color: white;
+                    font-weight: 600;
+                    border-radius: 4px;
+                    padding: 5px 16px;
+                    border: none;
+                    float: right;
+                    margin-top: 5px;
+                }
+
+                .kakaologin {
+                    background-color: #FFD94D;
+                    color: white;
+                    font-weight: 600;
+                    border-radius: 4px;
+                    padding: 5px 16px;
+                    border: none;
+                    float: right;
+                    margin-top: 5px;
+                }
+
+                .btn-login, .kakaologin {
+                    margin: 5px; /* 버튼 사이 간격 */
+                }
+
+
+                .table-body td {
+                    font-size: 15px;
+                    color: #009879; /* 글자 색상 */
+                }
+                body, button, input, select, textarea {  /*모든 버튼 폰트 적용*/
+                    font-family: 'omyu_pretty', sans-serif;
+                }
+            </style>
 
     <div class="card align-self-center">
-        <div class="card-header">
-            LOGIN Page
-        </div>
+
         <div class="card-body">
 
-            <th:block th:if="${param.logout != null}">  <!--파라미터에 logout이 있으면 -->
-                <h1>Logout(로그아웃 처리 됨)........</h1>
-            </th:block>
-            <!--  701        th:if="${param.logout == null}"  logout 없으면 로그인 창-->
-            <form id="registerForm" action="/member/login" method="post">
-                <div class="input-group mb-3">
-                    <span class="input-group-text">아이디</span>
-                    <input type="text" name="username" class="form-control" placeholder="USER ID">
+            <div class="loginPage" style="max-width:400px; margin:50px auto;">
+                <div class="loginPage">
+                    LOGIN PAGE
                 </div>
-                <div class="input-group mb-3">
-                    <span class="input-group-text">패스워드</span>
-                    <input type="text" name="password" class="form-control" placeholder="PASSWORD">
-                </div>
+                    <br><br>
 
-                <div class="input-group mb-3 ">
-                    <input class="form-check-input" type="checkbox" name="remember-me">
-                    <label class="form-check-label">
-                        자동 로그인(1달)
-                    </label>
-                </div>
+                    <!-- 로그아웃 메시지 -->
+                    <th:block th:if="${param.logout != null}">
+                        <div class="alert alert-success text-center mb-3" role="alert">
+                            로그아웃 되었습니다.
+                        </div>
+                    </th:block>
+                <div class="card-header">
+                    <!-- 로그인 폼 -->
+                    <form id="registerForm" action="/member/login" method="post">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">아이디</span>
+                            <input type="text" name="username" class="form-control" placeholder="USER ID" required>
+                        </div>
+                        <br>
 
-                <div class="my-4">
-                    <div class="float-end">
-                        <button type="submit" class="btn btn-primary submitBtn">LOGIN</button>
-                    </div>
-                </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">패스워드</span>
+                            <input type="password" name="password" class="form-control" placeholder="PASSWORD" required>
+                        </div>
+                        <br>
 
-                <div>
-                    <a href="/member/findID">아이디 찾기</a>
-                    <a href="/member/findPW">비밀번호 찾기</a>
-                </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" name="remember-me" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">
+                                자동 로그인 (1 달)
+                            </label>
+                        </div>
+                        <br>
 
-            </form>
-            <div>
-                <a href="/member/join">회원가입</a>
-            </div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <a href="/member/findID" class="text-success me-2">아이디 찾기</a> <a>  l  </a>
 
-             <div>
-                 <!--<a href="/oauth2/authorization/kakao">카카오톡로그인</a>-->
-                 <button onclick="openKakaoLogin()">카카오 로그인</button>
-             </div>
-        </div><!--end card body-->
-    </div><!--end card-->
-</div>
-</div>
-</body>
-</html>
+                                <a href="/member/findPW" class="text-success">비밀번호 찾기</a><a>  l  </a>
+
+                                    <a href="/member/join" class="text-success">회원가입</a>
+                                <br>
+                            </div>
+
+                            <div>
+                            <button type="submit" class="btn btn-login">LOGIN</button>
+                                <!--<a href="/oauth2/authorization/kakao">카카오톡 로그인</a>-->
+                                </div>
+                                <button onclick="openKakaoLogin()" class="kakaologin">카카오 로그인</button>
+                            </div>
+                    </form>
+
+
+
+
+
+                </div><!--end card body-->
+            </div><!--end card-->
+
 
 <button onclick="openKakaoLogin()">카카오 회원가입 / 로그인</button>
+
 
 <script>
     function openKakaoLogin() {
@@ -66,3 +206,5 @@
         window.open(url, 'kakaoLogin', `width=${width},height=${height},top=${top},left=${left}`);
     }
 </script>
+
+</html>

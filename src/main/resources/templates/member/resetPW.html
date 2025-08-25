@@ -1,13 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
+<meta charset="UTF-8">
+
+
 <head>
-    <meta charset="UTF-8">
-    <title>비밀번호 수정</title>
+    <link rel="stylesheet" href="/css/style.css">
+
     <style>
-        .error { color: red; }
+
+        body{
+            text-align: center;
+            color: #009879;
+        }
+
+        .form-control {
+            border: 2px dashed #009879;  /* 점선 */
+            padding: 10px;              /* 내부 여백 */
+            border-radius: 6px;         /* 패더 넣음 */
+            font-size: 14px;
+            white-space: nowrap; /* 줄바꿈 방지 */
+            text-align: left; /* 텍스트 왼쪽 정렬 */
+        }
+
+
+        .btn-submit {
+            background-color: #009879;
+            color: white;
+            font-weight: 600;
+            border-radius: 4px;
+            padding: 5px 16px;
+            border: none;
+            margin-top: 5px;
+
+        }
+
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;  /* 가로축 가운데 */
+            justify-content: center; /* 세로축 가운데 */
+            text-align: center;
+
+        }
     </style>
 </head>
+
+
 <body>
+<div class="card-body">
+    <div layout:fragment="content">
 
 <!-- 메시지 출력 -->
 <div th:if="${message}" th:text="${message}"
@@ -20,21 +64,24 @@
             <span class="input-group-text">ID</span>
             <input type="text" class="form-control" name="changePWAccountID" th:value="${changePWAccountID}" readonly>
         </div>
+        <br>
 
         <div class="input-group mb-3">
             <span class="input-group-text">PW</span>
             <input type="password" class="form-control" name="mpassword" placeholder="새로운 비밀번호">
-        </div>
+        </div> <br>
+
 
         <div class="input-group mb-3">
             <span class="input-group-text">PWCHECK</span>
             <input type="password" class="form-control" name="mpasswordCheck" placeholder="비밀번호 확인">
-        </div>
+        </div> <br>
+
 
         <div class="my-4">
             <div class="float-end">
-                <button type="submit" class="btn btn-primary submitBtn">Submit</button>
-                <button type="reset" class="btn btn-secondary">Reset</button>
+                <button type="submit" class="btn-submit">Submit</button>
+                <button type="reset" class="btn-submit">Reset</button>
             </div>
         </div>
 

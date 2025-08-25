@@ -1,15 +1,96 @@
+
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
+<meta charset="UTF-8">
+
+
 <head>
-    <meta charset="UTF-8">
-    <title>Delete</title>
+
+        <link rel="stylesheet" href="/css/style.css">
+
+        <style>
+
+            body{
+                text-align: center;
+            }
+
+            .delete-form {
+                display: flex;
+                gap: 10px; /* input과 버튼 사이 여백 */
+                justify-content: center; /* 가운데 정렬 */
+                align-items: center; /* 세로 정렬 맞추기 */
+                margin-top: 20px;
+            }
+
+            .card-body {
+                display: flex;
+                flex-direction: column;
+                align-items: center;  /* 가로축 가운데 */
+                justify-content: center; /* 세로축 가운데 */
+                text-align: center;
+
+            }
+
+            .message {
+                align-items: center;
+                font-size: 15px;
+                font-weight: bold;
+                color: #009879;
+                background: none;
+                border: none;
+                padding-left: 0;
+            }
+
+            .form-control {
+                border: 2px dashed #009879;  /* 점선 */
+                padding: 10px;              /* 내부 여백 */
+                border-radius: 6px;         /* 패더 넣음 */
+                font-size: 14px;
+                flex: 1; /* input이 늘어나서 꽉 차게 */
+                max-width: 300px; /* 최대 길이 제한 */
+            }
+
+            .btn-del {
+                background-color: #009879;
+                color: white;
+                font-weight: 600;
+                border-radius: 4px;
+                padding: 5px 16px;
+                border: none;
+                margin-top: 5px;
+                white-space: nowrap; /* 줄바꿈 방지 */
+            }
+
+            </style>
 </head>
+
+
+
 <body>
+<div class="card-body">
+<div layout:fragment="content">
+
 <form id="deleteAccountForm" th:action="@{/member/delete}" method="post">
+
+    <div class="message">
     <p>계정을 삭제하면 모든 데이터가 사라집니다. 정말 삭제하시겠습니까?</p>
-    <input type="password" name="checkPassword" placeholder="비밀번호 확인" required />
-    <button type="submit">계정 삭제</button>
+        <div>
+        <br>
+        <br>
+
+     <form class="delete-form">
+    <input type="password" name="checkPassword" class="form-control" placeholder="비밀번호 확인" required />
+    <button type="submit" class="btn btn-del">계정 삭제</button>
+    </form>
 </form>
+
+</div>
+
+
+
+
 
 <!-- 실패 메시지 alert -->
 <div th:if="${message}">

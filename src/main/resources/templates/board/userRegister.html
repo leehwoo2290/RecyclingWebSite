@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
+
+<head>
+
+    <div layout:fragment="content">
+        <link rel="stylesheet" href="/css/style.css">
+        <style>
+
+            .clean-input {
+                border: none;
+                outline: none;
+                background: transparent;
+                width: 100%;
+                font-size: 1rem;
+                resize: none; /* textarea 크기 조절 안 되게 */
+            }
+
+            /* 선택 시 깜빡임 커서만 보이도록 */
+            .clean-input:focus{
+                outline: none;
+                border-bottom: 1px solid #ccc; /* 원하면 밑줄만 표시 */
+            }
+
+            /* placeholder 색상 */
+            .clean-input::placeholder{
+                color: #aaa;
+            }
+
+            .table th {
+                font-weight: 600;
+                color: #009879;
+                border-bottom: 2px solid #009879;
+                padding: 12px;
+                text-align: center;
+            }
+
+            .table td {
+                border-bottom: 1px solid #009879;
+                padding: 12px;
+                text-align: center;
+                color: #333;
+            }
+
+            /* 행 hover 효과 */
+            .table tbody tr:hover {
+                background-color: #f8fdfb;
+            }
+
+
+            .page-item.active .page-link {
+                background-color: #009879;
+                color: #fff;
+                border-radius: 4px;
+                padding: 6px 12px;
+            }
+
+            /* 글쓰기 버튼 */
+            .btn-submit {
+                background-color: #009879;
+                color: white;
+                font-weight: 600;
+                border-radius: 4px;
+                padding: 8px 16px;
+                border: none;
+                float: right;
+                margin-top: 10px;
+            }
+
+            .btn-submit:hover {
+                background-color: #009879;
+                color: white;
+            }
+
+            .table-body td {
+                font-size: 15px;
+                color: #009879; /* 글자 색상 */
+                border: none; /* 추가: 테이블 바디 셀의 선 제거 */
+            }
+
+            /* 상세 페이지에서 사용되는 border 스타일 제거 */
+            .board-item {
+                border-bottom: none !important;
+            }
+
+            .board-container {
+                width: 80%;
+                margin: 0 auto;
+                padding: 2rem;
+            }
+
+            .board-header {
+                font-size: 2rem;
+                font-weight: bold;
+                color: #009879;
+                padding-bottom: 1rem;
+                border-bottom: 2px solid #009879;
+                margin-bottom: 1.5rem;
+            }
+
+            .board-item {
+                display: flex;
+                align-items: center;
+                padding: 1rem 0;
+                border-bottom: 1px solid #009879;
+                border-bottom: 1px solid #009879;
+            }
+
+            .board-item:last-of-type {
+                border-bottom: none;
+            }
+
+            .board-label {
+                width: 100px;
+                font-weight: bold;
+                color: #009879;
+                margin-right: 2rem;
+            }
+
+            .board-value {
+                flex-grow: 1;
+                color: #009879;
+                border-bottom: 1px solid #009879;
+            }
+
+            .board-content {
+                padding: 1.5rem 0;
+            }
+
+            .btn-submit {
+                background-color: #009879;
+                color: white;
+                font-weight: 600;
+                border-radius: 4px;
+                padding: 8px 16px;
+                border: none;
+                float: right;
+            }
+
+            body, button, input, select, textarea {  /*모든 버튼 폰트 적용*/
+                font-family: 'omyu_pretty', sans-serif;
+            }
+        </style>
+</head>
+
+
+<body>
+<div class="board-container">
+    <div class="board-header">게시판</div>
+
+    <form th:action="@{/board/userRegister}" method="post" th:object="${dto}">
+        <div class="board-item">
+            <div class="board-label">제목</div>
+            <div class="board-value">
+                <input type="text" th:field="*{title}" class="clean-input" placeholder="제목을 세 글자 이상 입력하세요" />
+            </div>
+        </div>
+
+        <!-- <div th:if="${#authentication.principal?.role == 'ADMIN'}">-->
+<!--        <label><input type="checkbox" th:field="*{notice}"> 공지글</label>-->
+
+
+        <div class="board-item">
+            <div class="board-label">내용</div>
+            <div class="board-value board-content">
+                <textarea th:field="*{content}" class="clean-input" rows="5" placeholder="내용을 입력하세요"></textarea>
+            </div>
+        </div>
+
+        <!-- <div class="board-item" th:if="${user.role eq 'ADMIN'}">-->
+        <div class="board-item">
+            <div class="board-label">작성자</div>
+            <div class="board-value">
+                <input type="text" th:field="*{writer}" class="clean-input" placeholder="작성자를 입력하세요" />
+            </div>
+        </div>
+
+        <div class="float-end">
+            <button type="submit" class="btn btn-submit">작성하기</button>
+        </div>
+    </form>
+
+
+
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+
+</body>
+</html>
